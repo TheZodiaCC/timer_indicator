@@ -8,6 +8,7 @@ from gi.repository import GObject
 from threading import Thread
 import time
 
+
 class TimeIndicator():
     def __init__(self):
         self.app = "timer_indicator"
@@ -21,6 +22,8 @@ class TimeIndicator():
         self.sec = 0
         self.mins = 0
         self.hours = 0
+
+        self.dead = True
 
     def create_menu(self):
         menu = Gtk.Menu()
@@ -48,9 +51,12 @@ class TimeIndicator():
         return menu
 
     def start(self, source):
-        self.update = Thread(target=self.time)
-        self.update.setDaemon(True)
-        self.update.start()
+        if self.dead == True:
+            self.update = Thread(target=self.time)
+            self.update.setDaemon(True)
+            self.update.start()
+        else:
+            pass
 
     def stop(self, source):
         self.dead = True
